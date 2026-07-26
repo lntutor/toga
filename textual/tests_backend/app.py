@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -5,6 +6,7 @@ import pytest
 from textual.app import App as TextualApp
 
 import toga
+from toga_textual.paths import user_path
 
 from .probe import BaseProbe
 
@@ -70,6 +72,51 @@ class AppProbe(BaseProbe):
             return Path.home() / f"AppData/Local/{AUTHOR}/{FORMAL_NAME}/Logs"
         else:
             return Path.home() / f".local/state/{APP_NAME}/log"
+
+    @property
+    def documents_path(self):
+        if sys.platform == "darwin":
+            return Path.home() / "Documents"
+        elif sys.platform == "win32":
+            from toga_textual.paths import _user_shell_folder
+
+            return Path(
+                os.path.expandvars(
+                    _user_shell_folder("Personal", Path.home() / "Documents")
+                )
+            )
+        else:
+            return user_path("XDG_DOCUMENTS_DIR", "Documents")
+
+    @property
+    def pictures_path(self):
+        if sys.platform == "darwin":
+            return Path.home() / "Pictures"
+        elif sys.platform == "win32":
+            from toga_textual.paths import _user_shell_folder
+
+            return Path(
+                os.path.expandvars(
+                    _user_shell_folder("My Pictures", Path.home() / "Pictures")
+                )
+            )
+        else:
+            return user_path("XDG_PICTURES_DIR", "Pictures")
+
+    @property
+    def desktop_path(self):
+        if sys.platform == "darwin":
+            return Path.home() / "Desktop"
+        elif sys.platform == "win32":
+            from toga_textual.paths import _user_shell_folder
+
+            return Path(
+                os.path.expandvars(
+                    _user_shell_folder("Desktop", Path.home() / "Desktop")
+                )
+            )
+        else:
+            return user_path("XDG_DESKTOP_DIR", "Desktop")
 
     async def assert_event_loop(self):
         pytest.skip("Event loop assertions are not implemented on Textual.")
