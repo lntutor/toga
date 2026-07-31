@@ -21,6 +21,10 @@ progress.value = 10
 progress.stop()
 ```
 
+Progress updates must co-operate with the application's event loop to become visible while work is running. See [Event loops](../../../topics/event-loops.md) for a complete example using a ProgressBar and guidance for asynchronous and blocking work.
+
+The repository's [ProgressBar example](https://github.com/beeware/toga/tree/main/examples/progressbar) demonstrates additional determinate, indeterminate, manual, and automatic progress controls.
+
 If a progress bar does *not* have a `max` value (i.e., `max == None`), it is an *indeterminate* progress bar. Any change to the value of an indeterminate progress bar will be ignored. When started, an indeterminate progress bar animates as a throbbing or "ping pong" animation.
 
 ```python
